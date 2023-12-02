@@ -48,7 +48,7 @@ class GameFunction:
 
         if need_check_answer == 1:
             print("qwe123123")
-            current_round_circles = self.guessing_list[game_count]
+            current_round_circles = m_list[game_count]
             current_color = []
             for circle in current_round_circles:
                 current_color.append(circle.color)
@@ -79,24 +79,25 @@ class GameFunction:
                 small_circle.draw()
 
             game_count += 1
+            need_check_answer = 0
             if black == 4:
-                return "success", game_count
+                return "success", game_count, need_check_answer
             else:
-                return "failed", game_count
+                return "failed", game_count, need_check_answer
         else:
-            return "noconfirm", game_count
+            return "noconfirm", game_count, need_check_answer
 
-    def delete_answer(self, game_count, m_list,need_check_answer):
-        for marble in reversed(self.guessing_list[game_count]):
+    def delete_answer(self, game_count, m_list, m_color_circle_list, need_check_answer, color):
+        for marble in reversed(m_list[game_count]):
             if not marble.is_empty:
                 # 重置这个圆圈为未填充状态
                 marble.draw_empty()
                 need_check_answer = 0
                 reset_color = marble.get_color()
-                self.m_color_circle_list[self.color.index(reset_color)].set_color(reset_color)
-                self.m_color_circle_list[self.color.index(reset_color)].draw()
+                m_color_circle_list[color.index(reset_color)].set_color(reset_color)
+                m_color_circle_list[color.index(reset_color)].draw()
                 break
-
+        return need_check_answer, m_color_circle_list
     def write_leaderboard(self, username, game_count, current_rank):
         try:
             before_rank = current_rank[username]

@@ -161,6 +161,7 @@ class GameUi:
             lose_msg_turtle.up()
             lose_msg_turtle.shape("Lose.gif")
             lose_msg_turtle.goto(0, 0)
+            turtle.update()
 
 
     def on_quit_button_click(self):
