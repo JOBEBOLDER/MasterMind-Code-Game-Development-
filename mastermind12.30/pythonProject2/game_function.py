@@ -111,14 +111,13 @@ class GameFunction:
                 f.write(f"{username},{game_count}\n")
 
     def load_leaderboard(self):
-
         self.pen.clear()
         self.pen.up()
         user_rank_dic = {}
 
         # processing of ranking list information
         try:
-            with open("leaderboard.txt", 'r') as f:
+            with open("leaderboard.txt", 'r', encoding='utf8') as f:
                 lines = f.readlines()
 
                 # Create an empty list to store tuples of (score, row)
@@ -129,7 +128,6 @@ class GameFunction:
                     parts = line.split(':')
                     score = int(parts[0])
                     score_line_pairs.append((score, line))
-
                 # sorting based on scores
                 # score_line_pairs.sort(key=lambda pair: pair[0])
                 score_line_pairs.sort()
