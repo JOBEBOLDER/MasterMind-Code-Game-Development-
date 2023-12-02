@@ -6,28 +6,30 @@ import random
 
 # get username from the input
 def userinput():
-    turtle.textinput("username", ' Name of the player:')
+    username = turtle.textinput("username", ' Name of the player:')
+
+    if username:
+        with open('leaderboard.txt', 'a') as file:
+            file.write(username + '\n')
+
+    return username
 
 
-# def load_leaderboard(self):
-#     # Load leaderboard from file or create new file
-#     try
-
-# 随机生成4个颜色
-def secret_code(color, length=4):
-    return random.sample(color, length)
 
 #生成画板
 def draw_main_board():
         # initialize the screen
+        #leaderboard的tittle
+        pen = turtle.Turtle()
+        pen.speed(10)
+
         screen = turtle.Screen()
         screen.title("Welcome To Kitu's MindMaster Code GAME!!")
         turtle.screensize(800, 900)
         turtle.setup(800, 900)
 
         # pen control 创建画笔
-        pen = turtle.Turtle()
-        pen.speed(10)  # fast speed:10,normal:6
+         # fast speed:10,normal:6
 
         pen.up()
         pen.goto(-380, 400)
@@ -42,7 +44,8 @@ def draw_main_board():
         pen.right(90)
         pen.fd(630)
 
-        # pen.goto(0, 0)
+
+        # pen.goto(0, 0)蓝色框leaderboard
         pen.up()
         pen.goto(135, 400)
         pen.pendown()
@@ -55,6 +58,16 @@ def draw_main_board():
         pen.fd(-630)
         pen.right(90)
         pen.fd(230)
+        x = 230
+        y = 355
+        turtle.hideturtle()
+        pen.up()
+        pen.goto(x, y)
+        pen.color('blue')
+        info = 'Leader Board'
+        turtle.pencolor('blue')
+        pen.write("Leader Board", align="center", font=("Arial", 25, "normal"))
+
 
         pen.up()
         pen.speed(10)
@@ -93,29 +106,8 @@ def draw_buttons():
     img_turtle.up()
     img_turtle.shape('quit.gif')
     img_turtle.goto(280, -320)
+    turtle.hideturtle()
 
-
-# 6个colors choices
-m_color_circle_list = []
-m_list = []
-small_m_list = []
-
-# 初始化6个颜色选择，
-def color_choices():
-    turtle.tracer(0)
-    color = ['black', 'red', 'yellow', 'blue', 'purple', 'green']
-    x = -300
-    y = -350
-    for i in color:
-        a = Marble(Point(x, y), 'black', size=15)
-        a.set_color(i)
-        a.draw()
-        m_color_circle_list.append(a)
-        x = x + 40
-    turtle.update()
-
-
-#把圆圈实例化，给用户点击用的
 def draw_circle_1():
     turtle.tracer(0)
     y = 300
@@ -148,47 +140,208 @@ def draw_circle_1():
         small_m_list.append(small_m_item_list)
         turtle.update()
 
+# 随机生成4个颜色
+def secret_code(color, length=4):
+    return random.sample(color, length)
+
+
+
+
+# 初始化6个颜色选择，
+def color_choices(color):
+    turtle.tracer(0)
+    x = -300
+    y = -350
+    for i in color:
+        a = Marble(Point(x, y), 'black', size=15)
+        a.set_color(i)
+        a.draw()
+        m_color_circle_list.append(a)
+        x = x + 40
+    turtle.update()
+
+
+#把圆圈实例化，给用户点击用的
+
+
 #主要的main game loop，并且handle 点击事件
 # 全局变量
 selected_color = ""
-def start_game(x, y):
-    global selected_color, m_list
+click_count = 0
 
-    # 检查是否点击了颜色选择区域
-    for color_circle in m_color_circle_list:
-        if color_circle.clicked_in_region(x, y):
-            selected_color = color_circle.get_color()
-            color_circle.set_color('white')
-            color_circle.draw()
-            break  # 退出循环，因为已经找到点击的颜色
-
-    # 如果已选择颜色，并且存在未上色的圆圈
-    if selected_color and m_list:
-        for marble_row in m_list:
-            for marble in marble_row:
-                if marble.is_empty:  # 检查圆圈是否未上色
-                    marble.set_color(selected_color)
-                    marble.draw()
-                    marble.is_empty = False  # 标记为已上色
-                    return  # 上色后返回，等待下一次点击
+def handle_click(x, y):
+    check_button_x = [100 - 22, 100 + 22]
+    check_button_y = [-320 - 40, -320 + 40]
+    quit_button_x = [280 - 40, 280 + 40]
+    quit_button_y = [-320 - 22, -320 + 22]
+    if check_button_x[0] <= x <= check_button_x[1] and check_button_y[0] <= y <= check_button_y[1]:
+        confirm_answer()
+    elif quit_button_x[0] <= x <= quit_button_x[1] and quit_button_y[0] <= y <= quit_button_y[1]:
+        on_quit_button_click()
+    else:
+        for color_circle in m_color_circle_list:
+            if color_circle.clicked_in_region(x, y):
+                fill_color(color_circle)
 
 
-def
+def fill_color(color_circle):
+    global need_check_answer, click_count
+    if need_check_answer == 0:
+        selected_color = color_circle.get_color()
+        current_round = m_list[game_count]
+        if click_count < len(current_round):
+            marble = current_round[click_count]
+            marble.set_color(selected_color)
+            marble.draw()
+            marble.is_empty = False
+            click_count += 1
+            if click_count == len(current_round):
+                need_check_answer = 1
 
 
-#退出游戏
-def quit_game():
-    turtle.bye()
+def get_current_color(m_list, game_count):
+    colors = []
+    for marble in m_list[game_count]:
+        colors.append(marble.color)
+    return colors
+
+
+#这个函数不是很懂
+def confirm_answer():
+    global need_check_answer, game_count, click_count
+    if need_check_answer == 1:
+        current_color =get_current_color(m_list, game_count)
+        print(f'current_color:{current_color}')
+        print(f'correct_color:{correct_color}')
+
+        black = 0
+        red = 0
+        for i, k in enumerate(current_color):
+            for j, l in enumerate(correct_color):
+                if l == k:
+                    if i == j:
+                        black += 1
+                    else:
+                        red += 1
+        white = 4 - black - red
+        print(black, red, white)
+
+        small_circle_color = []
+        for i in range(black):
+            small_circle_color.append('black')
+        for i in range(red):
+            small_circle_color.append('red')
+        for i in range(white):
+            small_circle_color.append('white')
+        print(small_circle_color)
+
+        for i, j in enumerate(small_circle_color):
+            small_circle = small_m_list[game_count][i]
+            small_circle.set_color(j)
+            small_circle.draw()
+
+        need_check_answer = 0
+        game_count += 1
+
+        if black == 4:
+            write_leaderboard(username, game_count)
+            color_choices(color)  # 仅调用一次
+            need_check_answer = 0
+            game_count += 1
+            click_count = 0  # 重置 click_count 为下一轮做准备
+
+def load_leaderboard():
+    screen = turtle.Screen()
+    s = turtle.Turtle()
+    s.hideturtle()
+    s.up()
+    s.goto(150,100)
+
+    try:
+        with open('leaderboard.txt', 'r') as f:
+            lines = f.readlines()
+            for line in lines:
+                s.write(line, move=False, align="left", font=("Arial", 12, "normal"))
+                s.sety(s.ycor() - 20)
+    except Exception as e:
+        print('Error:', e)
+
+
+def write_leaderboard(username, game_count):
+    print('you win!')
+    screen = turtle.Screen()
+    screen.addshape('winner.gif')
+    win_turtle = turtle.Turtle
+    win_turtle.up()
+    win_turtle.shape('winner.gif')
+    win_turtle.goto(0, 0)
+
+    try:
+        with open("leaderboard.txt", 'a') as f:
+            f.write(f"{username} {game_count}")
+
+    # 找不到leaderboard文件报错
+    except Exception as e:
+        screen.title('Error')
+        screen.addshape('file_error.gif')
+
+        msg_turtle = turtle.Turtle()
+        msg_turtle.up()
+        msg_turtle.shape('file_error.gif')
+        msg_turtle.goto(0, 0)
+
+        screen.onclick(lambda x, y: screen.bye())
+
+        screen.mainloop()
+
+
+
+def on_quit_button_click():
+    print("quit")
+    # 使用已经存在的屏幕对象
+    global screen
+    if 'quitmsg.gif' not in screen.getshapes():
+        screen.addshape('quitmsg.gif')
+    quit_turtle = turtle.Turtle()
+    quit_turtle.up()
+    quit_turtle.shape('quitmsg.gif')
+    quit_turtle.goto(0, 0)
+
+
 
 if __name__ == '__main__':
-    userinput()
+    #首先获取用户名
+    username = userinput()
+
+
+    # 初始化全局变量
+    # 6个colors choices,主要的main game loop，并且handle 点击事件
+    screen = turtle.Screen()
+    m_color_circle_list = []
+    m_list = []
+    small_m_list = []
+    color = ['black', 'red', 'yellow', 'blue', 'purple', 'green']
+    need_check_answer = 0
+    game_count = 0
+    correct_color = secret_code(color)
+
+    # 用户名输入完成猴，开始绘制游戏界面
     draw_main_board()
-    color_choices()
-    draw_buttons()
     draw_circle_1()
-    turtle.onscreenclick(start_game, btn=1, add=None)
+    load_leaderboard()
+    draw_buttons()
+
+
+    #初始化颜色选择区
+    color_choices(color)
+
+    # 设置点击事件处理器
+    turtle.onscreenclick(handle_click)
+
+    # 启动turtle主循环
     turtle.mainloop()
     turtle.done()
+
 
 
 
