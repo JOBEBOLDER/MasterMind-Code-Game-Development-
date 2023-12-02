@@ -117,7 +117,7 @@ class GameUi:
             m_item_list = []
             x_0 = x
             for j in range(4):
-                m = Marble(Point(x_0, y), 'black')
+                m = Marble(Point(x_0, y), '')
                 m.draw_empty()
                 m_item_list.append(m)
                 x_0 = x_0 + 60

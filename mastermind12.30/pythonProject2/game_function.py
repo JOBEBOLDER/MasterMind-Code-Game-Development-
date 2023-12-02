@@ -1,7 +1,5 @@
 import random
 
-import turtle
-
 
 class GameFunction:
     def __init__(self, screen, pen) -> None:
@@ -43,19 +41,13 @@ class GameFunction:
 
             return need_check_answer
 
-
-    def confirm_answer(self, need_check_answer, correct_color, game_count, m_list, small_m_list):
-
-        if need_check_answer == 1:
-            current_round_circles = m_list[game_count]
-            current_color = []
-            for circle in current_round_circles:
-                current_color.append(circle.color)
-            print(f"current_color:{current_color}")
+    @classmethod
+    def confirm_answer(cls, correct_color, current_answer):
+        if '' not in current_answer:
             print(f"correct_color:{correct_color}")
             black = 0
             red = 0
-            for i, k in enumerate(current_color):
+            for i, k in enumerate(current_answer):
                 for j, l in enumerate(correct_color):
                     if l == k:
                         if i == j:
@@ -72,19 +64,12 @@ class GameFunction:
                 small_circle_color.append('red')
             for i in range(white):
                 small_circle_color.append('white')
-            for i, j in enumerate(small_circle_color):
-                small_circle = small_m_list[game_count][i]
-                small_circle.set_color(j)
-                small_circle.draw()
-
-            game_count += 1
-            need_check_answer = 0
             if black == 4:
-                return "success", game_count, need_check_answer
+                return "success", small_circle_color
             else:
-                return "failed", game_count, need_check_answer
+                return "failed", small_circle_color
         else:
-            return "noconfirm", game_count, need_check_answer
+            return "noconfirm", None
 
     def delete_answer(self, game_count, m_list, m_color_circle_list, need_check_answer, color):
         for marble in reversed(m_list[game_count]):

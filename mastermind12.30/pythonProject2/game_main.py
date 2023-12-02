@@ -42,10 +42,18 @@ class Game:
         quit_button_y = [-325 - 22, -325 + 22]
 
         if check_button_x[0] <= x <= check_button_x[1] and check_button_y[0] <= y <= check_button_y[1] and not self.is_game_over:
-            result, self.game_count, self.need_check_answer = self.game_func.confirm_answer(self.need_check_answer, self.correct_color, self.game_count, self.m_list, self.small_m_list)
+            get_current_color = lambda m_list, game_count: [i.color for i in m_list[game_count]]
+            current_color = get_current_color(self.m_list, self.game_count)
+            print(f"current answer is f{current_color}")
+            result, small_circle_color = self.game_func.confirm_answer(self.correct_color, current_color)
             if result != "noconfirm":
+                for i, j in enumerate(small_circle_color):
+                    small_circle = self.small_m_list[self.game_count][i]
+                    small_circle.set_color(j)
+                    small_circle.draw()
                 self.game_func.reset_color_circle(self.color, self.m_color_circle_list)
-
+                self.game_count += 1
+                self.need_check_answer = 0
             if result == 'success':
                 self.is_game_over = True
                 current_rank = self.game_func.load_leaderboard()
