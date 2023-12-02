@@ -12,7 +12,7 @@ class Marble:
         self.is_empty = True
         self.pen.hideturtle()
         self.size = size
-        self.pen.speed(0)  # set to fastest drawing
+        self.pen.speed(10)  # set to fastest drawing
 
     def new_pen(self): 
         return turtle.Turtle()
@@ -45,6 +45,7 @@ class Marble:
         self.is_empty = True
         self.pen.down()
         self.pen.circle(self.size)
+        turtle.update()
         
     def erase(self):
         self.visible = False
@@ -63,7 +64,7 @@ def main():
     k = input("enter something here and I'll fill the marble > ")
     marble.draw()
     k = input("enter something here and I'll erase the marble > ")
-    marble.erase()
+    marble.draw_empty()
 
 if __name__ == "__main__":
     main()

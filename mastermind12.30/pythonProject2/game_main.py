@@ -51,7 +51,6 @@ class Game:
             if self.game_count == 10 and result == 'failed':
                 self.game_ui.lose_ui()
 
-
         elif quit_button_x[0] <= x <= quit_button_x[1] and quit_button_y[0] <= y <= quit_button_y[1]:
             self.game_ui.on_quit_button_click()
 

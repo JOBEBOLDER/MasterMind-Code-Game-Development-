@@ -42,6 +42,7 @@ class Marble:
         self.pen.circle(self.size)
         self.pen.end_fill()
 
+
     def draw_empty(self):
         self.erase()
         self.pen.up()
@@ -50,6 +51,7 @@ class Marble:
         self.is_empty = True
         self.pen.down()
         self.pen.circle(self.size)
+        turtle.update()
         
     def erase(self):
         self.visible = False
