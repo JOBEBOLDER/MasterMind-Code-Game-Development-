@@ -47,7 +47,6 @@ class GameFunction:
     def confirm_answer(self, need_check_answer, correct_color, game_count, m_list, small_m_list):
 
         if need_check_answer == 1:
-            print("qwe123123")
             current_round_circles = m_list[game_count]
             current_color = []
             for circle in current_round_circles:
@@ -103,12 +102,12 @@ class GameFunction:
             before_rank = current_rank[username]
             if game_count < before_rank:
                 current_rank[username] = game_count
-            with open("leaderboard.txt", 'w') as f:
+            with open("leaderboard.txt", 'w',encoding='utf8') as f:
                 for key, value in current_rank.items():
-                    f.write(f"{key},{value}\n")
+                    f.write(f"{value}:{key}\n")
         except KeyError:
-            with open("leaderboard.txt", 'a') as f:
-                f.write(f"{username},{game_count}\n")
+            with open("leaderboard.txt", 'a',encoding='utf8') as f:
+                f.write(f"{game_count}:{username}\n")
 
     def load_leaderboard(self):
         self.pen.clear()
@@ -131,7 +130,6 @@ class GameFunction:
                 # sorting based on scores
                 # score_line_pairs.sort(key=lambda pair: pair[0])
                 score_line_pairs.sort()
-                print(score_line_pairs)
                 # Extract sorted rows from sorted list
                 # sorted_lines = [pair[1] for pair in score_line_pairs]
                 # print(sorted_lines)

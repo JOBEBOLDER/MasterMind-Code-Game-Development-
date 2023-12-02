@@ -6,6 +6,7 @@ from Mastermind_Starter_code.Point import Point
 
 class GameUi:
     pen = turtle.Turtle()
+
     def __init__(self, screen):
         super().__init__()
         self.screen = screen
@@ -13,6 +14,7 @@ class GameUi:
     def get_username(self):
         username = turtle.textinput("username", ' Name of the player:')
         return username
+
     # 生成画板
     def draw_main_board(self):
         self.screen.title("Welcome To Kitu's MindMaster Code GAME!!")
@@ -103,6 +105,7 @@ class GameUi:
             x = x + 40
         turtle.update()
         return m_color_circle_list
+
     # 把圆圈实例化，给用户点击用的
     def draw_circle_1(self):
         m_list = []
@@ -110,7 +113,6 @@ class GameUi:
         turtle.tracer(0)
         y = 270
         x = -250
-        self.add_arrow(1, x - 63, y + 13)
         for i in range(10):  # 十次大循环
             m_item_list = []
             x_0 = x
@@ -153,7 +155,7 @@ class GameUi:
         win_msg_turtle.goto(0, 0)
 
     def lose_ui(self):
-        #pop up lose game message
+        # pop up lose game message
         print("you lose!!")
         if 'Lose.gif' not in self.screen.getshapes():
             self.screen.addshape('Lose.gif')
@@ -162,7 +164,6 @@ class GameUi:
             lose_msg_turtle.shape("Lose.gif")
             lose_msg_turtle.goto(0, 0)
             turtle.update()
-
 
     def on_quit_button_click(self):
         # 弹出退出的信息提示
@@ -174,10 +175,10 @@ class GameUi:
         quit_msg_turtle.goto(0, 0)
         turtle.update()
 
-    def add_arrow(self, need_check_answer, x, y):
-        if need_check_answer == 1:
+    def add_arrow(self, x, y, arrow_msg_turtle,game_count):
+        if game_count <= 9:
             self.screen.addshape('arrow.gif')
-            arrow_msg_turtle = turtle.Turtle()
+            arrow_msg_turtle.clear()
             arrow_msg_turtle.up()
             arrow_msg_turtle.shape('arrow.gif')
             arrow_msg_turtle.goto(x, y)
